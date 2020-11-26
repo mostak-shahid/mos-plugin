@@ -34,14 +34,14 @@ function mos_plugin_admin_enqueue_scripts(){
 add_action( 'admin_enqueue_scripts', 'mos_plugin_admin_enqueue_scripts' );
 function mos_plugin_enqueue_scripts(){
 	global $mos_plugin_option;
-	if ($mos_plugin_option['jquery']) {
+	if (@$mos_plugin_option['jquery']) {
 		wp_enqueue_script( 'jquery' );
 	}
-	if ($mos_plugin_option['bootstrap']) {
+	if (@$mos_plugin_option['bootstrap']) {
 		wp_enqueue_style( 'bootstrap.min', plugins_url( 'css/bootstrap.min.css', __FILE__ ) );
 		wp_enqueue_script( 'bootstrap.min', plugins_url( 'js/bootstrap.min.js', __FILE__ ), array('jquery') );
 	}
-	if ($mos_plugin_option['awesome']) {
+	if (@$mos_plugin_option['awesome']) {
 		wp_enqueue_style( 'font-awesome.min', plugins_url( 'fonts/font-awesome-4.7.0/css/font-awesome.min.css', __FILE__ ) );
 	}
 	wp_enqueue_style( 'mos-plugin', plugins_url( 'css/mos-plugin.css', __FILE__ ) );
