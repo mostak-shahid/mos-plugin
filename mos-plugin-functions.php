@@ -61,14 +61,14 @@ add_action( 'wp_enqueue_scripts', 'mos_plugin_ajax_scripts' );
 add_action( 'admin_enqueue_scripts', 'mos_plugin_ajax_scripts' );
 function mos_plugin_scripts() {
 	global $mos_plugin_option;
-	if ($mos_plugin_option['css']) {
+	if (@$mos_plugin_option['css']) {
 		?>
 		<style>
 			<?php echo $mos_plugin_option['css'] ?>
 		</style>
 		<?php
 	}
-	if ($mos_plugin_option['js']) {
+	if (@$mos_plugin_option['js']) {
 		?>
 		<style>
 			<?php echo $mos_plugin_option['js'] ?>
