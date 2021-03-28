@@ -37,10 +37,10 @@ function mos_plugin_section_top_nav_cb( $args ) {
 }
 function mos_plugin_section_dash_start_cb( $args ) {
 	$data = get_mos_plugin_active_tab ();
-  $options = get_option( 'mos_plugin_options' );
+  global $mos_plugin_options;
 	?>
 	<div id="mos-plugin-dashboard" class="tab-con <?php if($data['active_tab'] == 'dashboard') echo 'active';?>">
-		<?php var_dump($options) ?>
+		<?php var_dump($mos_plugin_options) ?>
 
 	<?php
 }
@@ -51,21 +51,21 @@ function mos_plugin_section_scripts_start_cb( $args ) {
 	<?php
 }
 function mos_plugin_field_jquery_cb( $args ) {
-	$options = get_option( 'mos_plugin_options' );
+	global $mos_plugin_options;
 	?>
-	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_plugin_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add JQuery from Plugin.', 'mos_plugin' ); ?></label>
+	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_plugin_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $mos_plugin_options[ $args['label_for'] ] ) ? ( checked( $mos_plugin_options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add JQuery from Plugin.', 'mos_plugin' ); ?></label>
 	<?php
 }
 function mos_plugin_field_bootstrap_cb( $args ) {
-	$options = get_option( 'mos_plugin_options' );
+	global $mos_plugin_options;
 	?>
-	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_plugin_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add JQuery from Plugin.', 'mos_plugin' ); ?></label>
+	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_plugin_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $mos_plugin_options[ $args['label_for'] ] ) ? ( checked( $mos_plugin_options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add JQuery from Plugin.', 'mos_plugin' ); ?></label>
 	<?php
 }
 function mos_plugin_field_css_cb( $args ) {
-	$options = get_option( 'mos_plugin_options' );
+	global $mos_plugin_options;
 	?>
-	<textarea name="mos_plugin_options[<?php echo esc_attr( $args['label_for'] ); ?>]" id="<?php echo esc_attr( $args['label_for'] ); ?>" rows="10" class="regular-text"><?php echo isset( $options[ $args['label_for'] ] ) ? esc_html_e($options[$args['label_for']]) : '';?></textarea>
+	<textarea name="mos_plugin_options[<?php echo esc_attr( $args['label_for'] ); ?>]" id="<?php echo esc_attr( $args['label_for'] ); ?>" rows="10" class="regular-text"><?php echo isset( $mos_plugin_options[ $args['label_for'] ] ) ? esc_html_e($mos_plugin_options[$args['label_for']]) : '';?></textarea>
 	<script>
     var editor = CodeMirror.fromTextArea(document.getElementById("mos_plugin_css"), {
       lineNumbers: true,
@@ -76,9 +76,9 @@ function mos_plugin_field_css_cb( $args ) {
 	<?php
 }
 function mos_plugin_field_js_cb( $args ) {
-	$options = get_option( 'mos_plugin_options' );
+	global $mos_plugin_options;
 	?>
-	<textarea name="mos_plugin_options[<?php echo esc_attr( $args['label_for'] ); ?>]" id="<?php echo esc_attr( $args['label_for'] ); ?>" rows="10" class="regular-text"><?php echo isset( $options[ $args['label_for'] ] ) ? esc_html_e($options[$args['label_for']]) : '';?></textarea>
+	<textarea name="mos_plugin_options[<?php echo esc_attr( $args['label_for'] ); ?>]" id="<?php echo esc_attr( $args['label_for'] ); ?>" rows="10" class="regular-text"><?php echo isset( $mos_plugin_options[ $args['label_for'] ] ) ? esc_html_e($mos_plugin_options[$args['label_for']]) : '';?></textarea>
 	<script>
     var editor = CodeMirror.fromTextArea(document.getElementById("mos_plugin_js"), {
       lineNumbers: true,

@@ -20,7 +20,7 @@ if ( ! defined( 'MOS_PLUGIN_SETTINGS' ) ) {
   //define( 'MOS_PLUGIN_SETTINGS', admin_url('/edit.php?post_type=post_type&page=plugin_settings') );
 	define( 'MOS_PLUGIN_SETTINGS', admin_url('/options-general.php?page=mos_plugin_settings') );
 }
-$mos_plugin_option = get_option( 'mos_plugin_option' );
+$mos_plugin_options = get_option( 'mos_plugin_options' );
 $plugin = plugin_basename(MOS_PLUGIN_FILE); 
 require_once ( plugin_dir_path( MOS_PLUGIN_FILE ) . 'mos-plugin-functions.php' );
 require_once ( plugin_dir_path( MOS_PLUGIN_FILE ) . 'mos-plugin-settings.php' );
