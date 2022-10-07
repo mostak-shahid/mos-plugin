@@ -1,11 +1,19 @@
 <?php
-/*
-Plugin Name: Mos Plugin
-Description: Base of future plugin
-Version: 0.0.1
-Author: Md. Mostak Shahid
-*/
-
+/**
+ * Plugin Name:       Mos Plugin
+ * Plugin URI:        http://www.mdmostakshahid.com/
+ * Description:       Base of future plugin
+ * Version:           0.0.1
+ * Requires at least: 5.2
+ * Requires PHP:      7.2
+ * Author:            Md. Mostak Shahid
+ * Author URI:        http://www.mdmostakshahid.com/
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Update URI:        http://www.mdmostakshahid.com/
+ * Text Domain:       mos-form-pdf
+ * Domain Path:       /languages
+**/
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
