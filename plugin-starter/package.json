@@ -1,0 +1,32 @@
+{
+  "name": "plugin-starter",
+  "version": "1.0.0",
+  "description": "Plugin starter boilerplate for WordPress",
+  "author": "Md. Mostak Shahid",
+  "license": "GPL-2.0-or-later",
+  "keywords": [],
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "plugin-zip": "wp-scripts plugin-zip",
+    "postinstall": "composer install"
+  },
+  "dependencies": {
+    "@coreui/icons": "^1.0.0",
+    "axios": "^1.9.0",
+    "bootstrap": "^5.3.5",
+    "react-bootstrap": "^2.10.9",
+    "react-router-dom": "^7.5.2"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.10.0",
+    "css-loader": "^7.1.2",
+    "file-loader": "^6.2.0",
+    "sass": "^1.84.0",
+    "sass-loader": "^16.0.4",
+    "style-loader": "^4.0.0"
+  }
+}
