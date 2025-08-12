@@ -1,7 +1,7 @@
+import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from 'react';
 import { formDataPost } from "../../lib/Helpers"; // Import utility function
 import './PluginCard.scss';
-// import { __ } from "@wordpress/i18n";
 export default function PluginCard({image, name, intro, plugin_source='internal', plugin_slug='', plugin_file='', download_url=''}) {
     /*
     data-sub_action="install_activate" 
@@ -12,130 +12,153 @@ export default function PluginCard({image, name, intro, plugin_source='internal'
 
     data-sub_action="install_activate"  
     data-plugin_source="internal" 
-    data-plugin_slug="mos-product-specifications-tab" 
-
+    data-plugin_slug="mos-product-specifications-tab"
     */
-    const [status, setStatus] = useState('');
-    const [pluginStatusLoading, setPluginStatusLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [pluginStatus, setPluginStatus] = useState("checking");
+    const [pluginFile, setPluginFile] = useState(null);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const [processing, setProcessing] = useState(false);
-    const [actionError, setActionError] = useState(null);
-    // const [buttonText, setButtonText] = useState('Processing...');
+    // Check plugin status on component mount
     useEffect(() => {
-        const fetchPluginStatus = async () => {
-            try {
-                const result = await formDataPost('plugin_starter_ajax_plugins_status', {
-                    file:plugin_file,
-                });
-                // console.log("Result:", result); // check structure here
-                setStatus(result?.data?.success_message); // Fix this line based on actual response
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setPluginStatusLoading(false);
-            }
-        };
-        fetchPluginStatus();
-    }, [status]);
-    // useEffect(() => {
-    //     if (status === 'not_active') {
-    //         setButtonText('Activate');
-    //     } else if (status === 'active') {
-    //         setButtonText('Activated');
-    //     } else if (status === 'activating') {
-    //         setButtonText('Activating');
-    //     } else if (status === 'installing') {
-    //         setButtonText('Installing');
-    //     } else if (status === 'not_installed') {
-    //         setButtonText('Install');
-    //     } else {
-    //         setButtonText('Processing...');
-    //     }
-    // }, [status]);
-
-    const buttonText = processing ? 'Processing...' : (actionError ? actionError : (status === 'not_active' ? 'Activate' : (status === 'active' ? 'Activated' : (status === 'activating' ? 'Activating' : (status === 'installing' ? 'Installing' : 'Install')))));
-    const sub_action = status === 'not_active' ? 'activate' : 'install';
+        checkPluginStatus();
+    }, [plugin_slug]);
+    const checkPluginStatus = async () => {
+        setPluginStatus("checking");
+        setErrorMessage("");
+        try {
+            const result = await formDataPost('plugin_starter_ajax_plugins_status', {
+                file:plugin_file,
+            });
+            // console.log("Result:", result); // check structure here
+            setPluginStatus(result?.data?.success_message); // Fix this line based on actual response
+        } catch (error) {
+            setErrorMessage(error.message);
+        } finally {
+            // setPluginStatusLoading(false);
+        }
+    };
 
     const handlePlugin = async () => {              
-        setProcessing(true);     
-        setActionError(null);   
-        setStatus(status === 'not_active'?'activating':'installing')         
+        // setProcessing(true);     
+        // setActionError(null);   
+        // setStatus(status === 'not_active'?'activating':'installing')         
+        // try {
+        //     const result = await formDataPost('plugin_starter_ajax_install_plugins', {
+        //         sub_action:sub_action,
+        //         download_url:download_url,                
+        //         plugin_slug:plugin_slug,
+        //         plugin_file:plugin_file,
+        //         plugin_source:plugin_source,
+        //     }); 
+        //     console.log("Result:", result); // check structure here
+        //     setStatus(result.data)
+        // } catch (error) {
+        //     setActionError(error.message);
+        // } finally {
+        //     setProcessing(false);
+        //     // setStatus(status === 'activating'?'active':'not_active') 
+        // }
+    };
+    
+    
+    const getButtonLabel = () => {
+        switch (pluginStatus) {
+            case "checking":
+                return __("Checking...", "plugin-starter");
+            case "not_installed":
+                return __("Install Now", "plugin-starter");
+            case "installed":
+                return __("Activate", "plugin-starter");
+            case "installing":
+                return __("Installing...", "plugin-starter");
+            case "installation_complete": // New state
+                return __("Installed", "plugin-starter");
+            case "activating":
+                return __("Activating...", "plugin-starter");
+            case "activated":
+                return __("Activated", "plugin-starter");
+            case "error":
+                return __("Try Again", "plugin-starter");
+            default:
+                return __("Install Now", "plugin-starter");
+        }
+    };
+    const handleButtonClick = () => {
+		switch (pluginStatus) {
+			case "not_installed":
+				installPlugin();
+				break;
+			case "installed":
+				activatePlugin();
+				break;
+			case "error":
+				checkPluginStatus();
+				break;
+			default:
+				break;
+		}
+	};       
+    
+    const installPlugin = async () => {
+        setPluginStatus("installing");
+        setErrorMessage("");
         try {
             const result = await formDataPost('plugin_starter_ajax_install_plugins', {
-                sub_action:sub_action,
+                sub_action:'install',
                 download_url:download_url,                
                 plugin_slug:plugin_slug,
                 plugin_file:plugin_file,
                 plugin_source:plugin_source,
             }); 
             console.log("Result:", result); // check structure here
-            setStatus(result.data)
         } catch (error) {
-            setActionError(error.message);
+            setErrorMessage(error.message);
         } finally {
-            setProcessing(false);
-            // setStatus(status === 'activating'?'active':'not_active') 
+            setPluginStatus("installed"); 
         }
     };
+
+    const activatePlugin = async () => {
+        setPluginStatus("activating");
+        setErrorMessage("");        
+        try {
+            const result = await formDataPost('plugin_starter_ajax_install_plugins', {
+                sub_action:'activate',
+                download_url:download_url,                
+                plugin_slug:plugin_slug,
+                plugin_file:plugin_file,
+                plugin_source:plugin_source,
+            }); 
+            console.log("Result:", result); // check structure here
+        } catch (error) {
+            setErrorMessage(error.message);
+        } finally {
+            setPluginStatus("activated"); 
+        }
+    };
+    const isButtonDisabled = ["checking", "installing", "activating","installation_complete"].includes(
+		pluginStatus,
+	);
     return (
-        <div className="row g-2 PluginCard"> 
-            {
-                // console.log('PluginCard',', status', status)
-                // pluginStatusLoading && 
-                // console.log('slug', slug, ', plugin_file', plugin_file, ', status', status)
-            }                                  
+        <div className="row g-2 safq-plugin-card align-items-center"> 
             <div className="col-auto">
                 <div style={{width:'60px', height:'60px'}}>
                     <img className="img-fluid" src={image} alt="" />
                 </div>
             </div>
-            <div className="col d-flex flex-column justify-content-between">
+            <div className="col">
                 <h4 className="title m-0" dangerouslySetInnerHTML={{ __html: name }}/>
                 {/* <p className="intro m-0" dangerouslySetInnerHTML={{ __html: intro }}/> */}
-                
-                {
-                    pluginStatusLoading 
-                    ? <div className="loading-skeleton h4" style={{width:'60%', height: '24px', marginBottom: '5px'}}></div> 
-                    : <div className="action">
-                        {
-                            status !== 'active' 
-                            ?
-                            <span className="link"
-                                href="#"
-                                onClick={() => handlePlugin()}
-                            >
-                                {
-                                    buttonText
-                                }
-                            </span>
-                            : <span className="link">Activated</span>
-                        }
-                        
-                    </div>
-                }
+                <div className="action">
+                    <button 
+                        onClick={handleButtonClick}
+                        className={`link install-button ${pluginStatus}`}
+                        disabled={isButtonDisabled}
+                    >                            
+                        {getButtonLabel()}
+                    </button>
+                </div>
             </div>
-            {/* 
-            <button type="button" 
-                data-sub_action="install_activate" 
-                data-plugin_source="external" 
-                data-download_url="https://github.com/mostak-shahid/mos-woocommerce-protected-categories/archive/refs/heads/main.zip"
-                data-plugin_slug="mos-woocommerce-protected-categories-main" 
-                data-plugin_file="mos-woocommerce-protected-categories.php" 
-
-                 id="mos-install-activate" class="plugin-starter-install-github-plugin button button-primary">Install & Activate Plugin</button>
-            <button type="button" data-sub_action="install" data-plugin_source="external" data-download_url="https://github.com/mostak-shahid/mos-woocommerce-protected-categories/archive/refs/heads/main.zip" data-plugin_slug="mos-woocommerce-protected-categories-main" data-plugin_file="mos-woocommerce-protected-categories.php" id="mos-install" class="plugin-starter-install-github-plugin button">Install Plugin</button>
-            <button type="button" data-sub_action="activate" data-plugin_source="external" data-download_url="https://github.com/mostak-shahid/mos-woocommerce-protected-categories/archive/refs/heads/main.zip" data-plugin_slug="mos-woocommerce-protected-categories-main" data-plugin_file="mos-woocommerce-protected-categories.php" id="mos-activate" class="plugin-starter-install-github-plugin button">Activate Plugin</button>
-
-            <!-- mos-product-specifications-tab -->
-            <button type="button" 
-                data-sub_action="install_activate"  
-                data-plugin_source="internal" 
-                data-plugin_slug="mos-product-specifications-tab" 
-                id="mos-install-activate" class="plugin-starter-install-github-plugin button button-primary">Install & Activate Plugin</button>
-            <button type="button" data-sub_action="install"  data-plugin_source="internal" data-plugin_slug="mos-product-specifications-tab" id="mos-install" class="plugin-starter-install-github-plugin button">Install Plugin</button>
-            <button type="button" data-sub_action="activate"  data-plugin_source="internal" data-plugin_slug="mos-product-specifications-tab" id="mos-activate" class="plugin-starter-install-github-plugin button">Activate Plugin</button>
-            */}
         </div>
     )
 }

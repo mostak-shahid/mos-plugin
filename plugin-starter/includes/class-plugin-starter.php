@@ -126,6 +126,8 @@ class Plugin_Starter
 		 * side of the site.
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-plugin-starter-public.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-import-export.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-plugin-starter-more.php';
 
 		$this->loader = new Plugin_Starter_Loader();
 	}

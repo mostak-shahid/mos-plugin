@@ -10,6 +10,8 @@ import { Link, Route, Routes } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Loading from './pages/Loading/Loading';
 import Settings from './pages/Settings/Settings';
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
 const NotFound = () => (
   <div>
       <h2>{__( "404 - Page Not Found", "plugin-starter" )}</h2>
@@ -50,7 +52,7 @@ function App() {
   const [processing, setProcessing] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [saveError, setSaveError] = useState(null);
-  const [showFormNotice, setShowFormNotice] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const handleSave = async () => {
     setProcessing(true);
     setSaveLoading(true);
@@ -64,13 +66,13 @@ function App() {
       });
 
       window.scrollTo(0, 0);
-      console.log("Settings saved successfully:", response);
+      // console.log("Settings saved successfully:", response);
       setSaveLoading(false);
       setProcessing(false);
-      setShowFormNotice(true);
+      setShowToast(true);
 
       setTimeout(() => {
-        setShowFormNotice(false);
+        setShowToast(false);
       }, 3000);
     } catch (error) {
       console.error("Error saving settings:", error);
@@ -90,7 +92,7 @@ function App() {
           setResetAllLoading(true);
           setResetAllError(null);         
           try {
-              // result = await formDataPost('ultimate_security_reset_all_settings', {}); 
+              // result = await formDataPost('plugin_starter_reset_all_settings', {}); 
               const formData = new FormData();
               // Append action and nonce
 		          formData.append("action", 'plugin_starter_reset_settings');
@@ -106,7 +108,7 @@ function App() {
 
               const json = await response.json(); // parse manually
 
-              console.log("AJAX response:", json); // log to see structure
+              // console.log("AJAX response:", json); // log to see structure
 
               // if (json.success) {
               //   return json.data || true; // return true or whatever data is needed
@@ -115,12 +117,12 @@ function App() {
               // }
         
               window.scrollTo(0, 0);
-              console.log("Settings saved successfully:", response);
+              // console.log("Settings saved successfully:", response);
               setResetAllLoading(false);
               setProcessing(false);
-              setShowFormNotice(true);        
+              setShowToast(true);        
               setTimeout(() => {
-                setShowFormNotice(false);
+                setShowToast(false);
                 location.reload();
               }, 1000);
 
@@ -146,6 +148,29 @@ function App() {
     {
       !settingLoading ? 
       <>
+      <ToastContainer
+          className="p-3"
+          // position="end"
+          style={{ zIndex: 9999, top:'43px', right:0 }}
+      >
+          <Toast 
+              bg="success"
+              onClose={() => setShowToast(false)} 
+              show={showToast} 
+              delay={3000} 
+              autohide
+          >
+              <Toast.Header>
+                  <strong className="me-auto">{__('Saved',"plugin-starter")}</strong>
+              </Toast.Header>
+              <Toast.Body>
+                  {__(
+                      'All changes have been applied correctly, ensuring your preferences are now in effect.',                                                        
+                      "plugin-starter"
+                  )}
+              </Toast.Body>
+          </Toast>
+      </ToastContainer>
       <div className="plugin-starter-settings-container">
         <Header />
         <Routes>

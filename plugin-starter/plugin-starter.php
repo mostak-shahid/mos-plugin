@@ -8,17 +8,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://programmelab.com/
+ * @link              https://www.mdmostakshahid.com/
  * @since             1.0.0
  * @package           Plugin_Starter
  *
  * @wordpress-plugin
  * Plugin Name:       Plugin Starter
- * Plugin URI:        https://programmelab.com/plugin-starter/
+ * Plugin URI:        https://www.mdmostakshahid.com/plugin-starter/
  * Description:       Plugin starter boilerplate for WordPress
  * Version:           1.0.0
  * Author:            Md. Mostak Shahid
- * Author URI:        https://programmelab.com/
+ * Author URI:        https://www.mdmostakshahid.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       plugin-starter
@@ -36,7 +36,7 @@ if (!defined('ABSPATH')) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define('PLUGIN_STARTER_VERSION', '1.0.0');
-define('PLUGIN_STARTER_NAME', __('Plugin Starter', 'plugin-starter'));
+define('PLUGIN_STARTER_NAME', 'Plugin Starter');
 
 define('PLUGIN_STARTER_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_STARTER_URL', plugin_dir_url(__FILE__));
@@ -98,20 +98,20 @@ function plugin_starter_get_tabs()
 	/*$plugin_starter_tabs = [
 		'integration' => [
 			'slug' => 'integration',
-			'name' => esc_html__('Restrictions', 'plugin-starter'),
-			'description' => esc_html__('Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'plugin-starter'),
+			'name' => 'Restrictions',
+			'description' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
 			'url' => 'plugin-starter',
 			'sub' => [
 				'security-for-woocommerce' => [
 					'slug' => 'security-for-woocommerce',
-					'name' => esc_html__('Settings', 'plugin-starter'),
-					'description' => esc_html__('Below you will find all the settings you need to restrict specific countires and IP addressses that you wish to restrict for your WooCommerce site. The restrictons will be applied to your WooCommerce pages.', 'plugin-starter'),
+					'name' => 'Settings',
+					'description' => 'Below you will find all the settings you need to restrict specific countires and IP addressses that you wish to restrict for your WooCommerce site. The restrictons will be applied to your WooCommerce pages.',
 					'url' => 'plugin-starter'
 				],
 				'customize' => [
 					'slug' => 'customize',
-					'name' => esc_html__('Customize', 'plugin-starter'),
-					'description' => esc_html__('Below you will find all the settings you need to customize restriction pages including the images that the visitor will see if they are restricted from accessing the website. The customization will be applied to your WooCommerce pages.', 'plugin-starter'),
+					'name' => 'Customize',
+					'description' => 'Below you will find all the settings you need to customize restriction pages including the images that the visitor will see if they are restricted from accessing the website. The customization will be applied to your WooCommerce pages.',
 					'url' => 'plugin-starter-integration-customize'
 				],
 			],
@@ -187,8 +187,16 @@ function plugin_starter_get_default_options()
 					'https://web.skype.com/'
 				]
 			]
-		]
+		],
 		// 'editor-input' => '<p>Lorem</p>',
+
+		'more' => [
+			'enable_scripts' => 0,
+			'css' => '/* CSS Code Here */',
+			'js' => '// JavaScript Code Here',
+			'header_content' => '<!-- Content inside HEAD tag -->',
+			'footer_content' => '<!-- Content inside BODY tag -->',
+		],
 
 	];
 	$plugin_starter_default_options = apply_filters('plugin_starter_default_options_modify', $plugin_starter_default_options);
@@ -231,3 +239,11 @@ function plugin_starter_is_plugin_page()
 	}
 	return false;
 }
+add_action( 'before_woocommerce_init', function() {
+    if (
+        class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class )
+    ) {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
+    }
+} );

@@ -1,5 +1,5 @@
 :root {
-  --plugin-starter-color: #0073aa;
+  --plugin-starter-color: #720eec;
   --plugin-starter-color-light: #00a0d2;
   --plugin-starter-color-dark: #005177;
   --plugin-starter-color-accent: #f7f7f7;
@@ -26,12 +26,14 @@
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .link,
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper a {
   text-decoration: none;
-  cursor: pointer;
-  color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+  color: var(--plugin-starter-color);
 }
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .link:hover,
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper a:hover {
-  color: #135e96;
+  color: #000000;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .link {
+  cursor: pointer;
 }
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper h6,
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .h6,
@@ -110,16 +112,54 @@
   padding: 2px;
   width: 27px;
 }
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .button-link {
+  background-color: transparent !important;
+}
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .top-bar {
   background-color: #343a40;
 }
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar {
   top: 32px;
+  padding: 0;
 }
 @media screen and (max-width: 600px) {
   .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar {
     top: 0;
   }
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav .nav-link {
+  outline: none;
+  box-shadow: none;
+  position: relative;
+  height: 42px;
+  color: #000000;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav .nav-link.active, .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav .nav-link:hover {
+  color: var(--plugin-starter-color);
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav .nav-link:focus, .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav .nav-link:active, .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav .nav-link:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+@media screen and (min-width: 992px) {
+  .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: var(--bs-navbar-nav-link-padding-x);
+    right: var(--bs-navbar-nav-link-padding-x);
+    height: 4px;
+    background-color: var(--plugin-starter-color);
+  }
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav.navbar-nav-left .nav-link {
+  color: #000000;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav.navbar-nav-left .nav-link.active, .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-nav.navbar-nav-left .nav-link:hover {
+  color: var(--plugin-starter-color);
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-brand {
+  color: #000000;
 }
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-brand img {
   width: 40px;
@@ -127,6 +167,12 @@
 }
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-brand span {
   font-weight: 700;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-brand:hover {
+  color: var(--plugin-starter-color);
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .navbar-brand:focus {
+  box-shadow: none;
 }
 .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container nav.navbar .nav-item {
   margin-bottom: 0;
@@ -142,6 +188,22 @@
   padding: 0;
   max-width: unset;
 }
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .plugin-starter-settings .sidebar .list-group-item {
+  border-style: none;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .plugin-starter-settings .sidebar .list-group-item:focus, .plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .plugin-starter-settings .sidebar .list-group-item:hover {
+  background-color: transparent;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .plugin-starter-settings .sidebar .submenu {
+  margin-left: 16px;
+}
+.plugin-starter-settings-template #wpcontent #wpbody #wpbody-content .plugin-starter-settings-wrapper .plugin-starter-settings-container .plugin-starter-settings .sidebar .submenu .list-group-item {
+  border-left: 2px solid #eaeaea;
+}
+.plugin-starter-settings-template #wpfooter {
+  display: none;
+}
+
 .loading-skeleton {
   background: linear-gradient(45deg, #e0e0e0 25%, #f8f8f8 50%, #e0e0e0 75%);
   background-size: 200% 100%;

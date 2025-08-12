@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 // import axios from "axios";
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 // import { extractJSONFromHTML } from "../lib/Helpers";
 // import menuData from "../data/pages.json"; // Load menu JSON
 const MainContext = createContext();
@@ -39,8 +39,23 @@ const settingsMenu = {
             }
         }
     },
+    "import_export": { 
+        "title": __( "Import & Expport", "plugin-starter" ), 
+        "description": __( "Import and Export your settings.", "plugin-starter" ), 
+        "url":"/settings/import_export"
+    },
+    "more": { 
+        "title": __( "More", "plugin-starter" ), 
+        "description": __( "Adding more features to your Store.", "plugin-starter" ), 
+        "url":"/settings/more"
+    },
+    "feedback": { 
+        "title": __( "Feedback", "plugin-starter" ), 
+        "description": __( "We\'re constantly enhancing our product, and your feedback is key to staying ahead of the curve and delivering a stronger, more reliable security solution for you.", "plugin-starter" ), 
+        "url":"/settings/feedback"
+    },
 };
-  
+
 
 export const MainProvider = ({ children }) => {
     const [settingData, setSettingData] = useState({});

@@ -4,9 +4,11 @@ import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import MultiLevelListGroup from "../components/MultiLevelListGroup/MultiLevelListGroup";
+import PageInfo from "../components/PageInfo/PageInfo";
 import { useMain } from "../contexts/MainContext";
-import Notice from "../layouts/Notice/Notice";
 import { formDataPost, setNestedValue, urlToArr } from "../lib/Helpers"; // Import utility function
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
 const withForm = (OriginalComponent) => {     
     function NewComponent() {
         const {
@@ -18,11 +20,10 @@ const withForm = (OriginalComponent) => {
             settingReload,
             setSettingReload
         } = useMain();
-        
         const [saveLoading, setSaveLoading] = useState(false)
         const [saveError, setSaveError] = useState(null)
 
-        const [showFormNotice, setShowFormNotice] = useState(false)
+        const [showToast, setShowToast] = useState(false)
 
         const [resetLoading, setResetLoading] = useState(false)
         const [resetError, setResetError] = useState(null)
@@ -42,7 +43,7 @@ const withForm = (OriginalComponent) => {
             const baseURL = '/wp-json/plugin-starter/v1';        
             const fetchSettingData = async () => {
                 try {
-                    const response = await axios.get(`${baseURL}/options`);
+                    const response = await axios.get(`${baseURL}/options`, {headers: {'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce }});
                     setSettingData(response.data);
                     setSettingLoading(false)
                 } catch (error) {
@@ -65,23 +66,30 @@ const withForm = (OriginalComponent) => {
             setProcessing(true);
             setSaveLoading(true);
             setSaveError(null);
-            axios.post(OPTIONS_API_URL, {'plugin_starter_options': settingData})
+            axios.post(
+                OPTIONS_API_URL, 
+                {'plugin_starter_options': settingData},
+                {
+                    headers: {
+                        'X-WP-Nonce': plugin_starter_ajax_obj.api_nonce,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
             .then(response => {
                 window.scrollTo(0, 0);
-                console.log("Settings saved successfully:", response.data);
+                // console.log("Settings saved successfully:", response.data);
                 setSaveLoading(false)        
                 setProcessing(false)
-                setShowFormNotice(true)
-                setTimeout(()=> {
-                    setShowFormNotice(false)
-                },3000)
+                setShowToast(true)
+                
             })
             .catch(
                 error => console.error("Error saving settings:", error)
             );
         };
-        const handleReset = async (name) => {
-            console.log(name)
+       const handleReset = async (name) => {
+            // console.log(name)
             const confirmation = window.confirm(__( "Are you sure you want to proceed?", "plugin-starter" ));
             let result;
             if (confirmation) {       
@@ -121,57 +129,79 @@ const withForm = (OriginalComponent) => {
         }, [])
         return (
             <>
-                {
-                    showFormNotice && 
-                    <div className="container-fluid"><Notice /></div>
-                }
+                <ToastContainer
+                    className="p-3"
+                    // position="end"
+                    style={{ zIndex: 9999, top:'43px', right:0 }}
+                >
+                    <Toast 
+                        bg="success"
+                        onClose={() => setShowToast(false)} 
+                        show={showToast} 
+                        delay={3000} 
+                        autohide
+                    >
+                        <Toast.Header>
+                            <strong className="me-auto">{__('Saved',"plugin-starter")}</strong>
+                        </Toast.Header>
+                        <Toast.Body>
+                            {__(
+                                'All changes have been applied correctly, ensuring your preferences are now in effect.',                                                        
+                                "plugin-starter"
+                            )}
+                        </Toast.Body>
+                    </Toast>
+                </ToastContainer>
                 <div className="plugin-starter-settings">
                     <div className="container">
                         <div className="row g-0">
                             <div className="col-lg-3 d-none d-lg-block">
-                                <div className="card mt-0 rounded-0" style={{marginRight:'-1px', height: "100%"}}>                            
-                                <MultiLevelListGroup  data={settingsMenu}/>
+                                <div className="plugin-starter-sidebar card mt-0 py-3 rounded-0" style={{marginRight:'-1px', height: "100%"}}>                            
+                                    <MultiLevelListGroup  data={settingsMenu}/>
                                 </div>
                             </div>
                             <div className="col-lg-9">
                                 <div className="card mt-0 rounded-0" style={{height: "100%"}}>
-                                    <div className="card-header">
-                                        Title
-                                    </div>
+                                    <PageInfo url={location.pathname} />
                                     <div className="card-body">        
                                         <OriginalComponent handleChange={handleChange} />
                                     </div>
-                                    <div className="card-footer d-flex gap-2">
-                                        <button 
-                                            type="button" 
-                                            className="button button-primary" 
-                                            onClick={handleSave}
-                                            disabled={processing}
-                                        >
-                                            {
-                                                saveLoading ? __( "Saving...", "plugin-starter" ) : __( "Save Changes", "plugin-starter" )
-                                            }
-                                        </button>
-                                        <button 
-                                            className="button button-secondary"
-                                            data-menu={`${urlArr[0]}.${ urlArr[urlArr.length-1]}`}
-                                            onClick={() => handleReset(`${urlArr[0]}.${ urlArr[urlArr.length-1]}`)}
-                                            disabled={processing}
-                                        >
-                                            {resetLoading ? __( "Resetting...", "plugin-starter" ) : __( "Reset Settings", "plugin-starter" )}
-                                        </button>
-                                        <button 
-                                            className="button button-secondary"
-                                            onClick={handleResetAll}
-                                            disabled={processing}
-                                        >
-                                            {resetAllLoading ? __( "Resetting...", "plugin-starter" ) : __( "Reset All", "plugin-starter" )}
-                                        </button>
+                                    {/* {console.log(location.pathname)} */}
+                                    {
+                                        (location.pathname!='/settings/feedback' && location.pathname!='/settings/import_export') && 
+                                            <div className="card-footer d-flex gap-2">
+                                                <button 
+                                                    type="button" 
+                                                    className="button button-primary" 
+                                                    onClick={handleSave}
+                                                    disabled={processing}
+                                                >
+                                                    {
+                                                        saveLoading ? __( "Saving...", "plugin-starter" ) : __( "Save Changes", "plugin-starter" )
+                                                    }
+                                                </button>
+                                                {/* <button 
+                                                    className="button button-secondary"
+                                                    data-menu={`${urlArr[0]}.${ urlArr[urlArr.length-1]}`}
+                                                    onClick={() => handleReset(`${urlArr[0]}.${ urlArr[urlArr.length-1]}`)}
+                                                    disabled={processing}
+                                                >
+                                                    {resetLoading ? __( "Resetting...", "plugin-starter" ) : __( "Reset Settings", "plugin-starter" )}
+                                                </button> */}
+                                                <button 
+                                                    className="button button-secondary"
+                                                    onClick={handleResetAll}
+                                                    disabled={processing}
+                                                >
+                                                    {resetAllLoading ? __( "Resetting...", "plugin-starter" ) : __( "Reset", "plugin-starter" )}
+                                                </button>
 
-                                        {resetAllError && <div className="plugin-starter-error">{resetAllError}</div>}
-                                        {resetError && <div className="plugin-starter-error">{resetError}</div>}
-                                        {saveError && <div className="plugin-starter-error">{saveError}</div>}
-                                    </div>
+                                                {resetAllError && <div className="plugin-starter-error">{resetAllError}</div>}
+                                                {resetError && <div className="plugin-starter-error">{resetError}</div>}
+                                                {saveError && <div className="plugin-starter-error">{saveError}</div>}
+                                            </div>
+                                    }
+                                    
                                 </div>
                             </div>
                         </div>
